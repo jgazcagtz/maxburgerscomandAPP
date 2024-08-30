@@ -163,7 +163,7 @@
             margin: 10px 0;
             border: 1px solid var(--primary-color);
             border-radius: 8px;
-            background-color: var (--white);
+            background-color: var(--white);
             color: var(--primary-color);
             font-size: 0.9em;
         }
@@ -311,7 +311,7 @@
 
         #save-order-btn:hover {
             background-color: var(--accent-color);
-            color: var (--primary-color);
+            color: var(--primary-color);
         }
 
         #save-cloud-btn {
@@ -533,10 +533,15 @@
         <h3>🛒 Carrito</h3>
         <div id="cart-items"></div>
         <p id="cart-total">Total: $0.00</p>
+        <div>
+            <label><input type="checkbox" id="include-delivery" onchange="toggleDeliveryFee()"> Incluir costo de entrega</label>
+        </div>
+        <div id="delivery-distance-container" style="display:none;">
+            <p>Distancia (km):</p>
+            <input type="number" id="delivery-distance" placeholder="Ingresa la distancia en km" onchange="updateCart()">
+        </div>
         <p id="delivery-fee">Costo de entrega: $0.00</p>
         <p id="final-total">Total Final: $0.00</p>
-        <p>Distancia (km):</p>
-        <input type="number" id="delivery-distance" placeholder="Ingresa la distancia en km" onchange="updateCart()">
         <p>Número de Mesa:</p>
         <input type="text" id="table-number" placeholder="Ingresa número de mesa">
         <p>Colaborador:</p>
@@ -571,10 +576,15 @@
         <h2>🌯 Burritos</h2>
     </div>
     <div id="menu-vertical-burritos" class="vertical-product-grid"></div>
-<div class="menu-title-container">
+
+    <div class="menu-title-container">
         <h2>🌮 Tacos</h2>
     </div>
     <div id="menu-vertical-tacos" class="vertical-product-grid"></div>
+<div class="menu-title-container">
+        <h2>🧀 Nachos</h2>
+    </div>
+    <div id="menu-vertical-nachos" class="vertical-product-grid"></div>
     <div class="menu-title-container">
         <h2>🥤 Bebidas</h2>
     </div>
@@ -774,6 +784,13 @@
             }
         }
 
+        window.toggleDeliveryFee = function () {
+            const includeDelivery = document.getElementById('include-delivery').checked;
+            const deliveryDistanceContainer = document.getElementById('delivery-distance-container');
+            deliveryDistanceContainer.style.display = includeDelivery ? 'block' : 'none';
+            updateCart();
+        }
+
         window.updateCart = function () {
             const cartItemsSection = document.getElementById('cart-items');
             const cartTotal = document.getElementById('cart-total');
@@ -781,6 +798,7 @@
             const finalTotalEl = document.getElementById('final-total');
             const editCartItems = document.getElementById('edit-cart-items');
             const distance = parseFloat(document.getElementById('delivery-distance').value) || 0;
+            const includeDelivery = document.getElementById('include-delivery').checked;
 
             cartItemsSection.innerHTML = '';
             editCartItems.innerHTML = '';
@@ -802,7 +820,10 @@
                 totalItems += item.quantity;
             });
 
-            const deliveryFee = calculateDeliveryFee(distance);
+            let deliveryFee = 0;
+            if (includeDelivery) {
+                deliveryFee = calculateDeliveryFee(distance);
+            }
             const finalTotal = total + deliveryFee;
 
             cartTotal.textContent = `Total: $${total.toFixed(2)}`;
@@ -911,8 +932,9 @@
             displayProducts(products.filter(product => product.name.includes('Hamburguesa')), 'horizontal', 'menu-horizontal');
             displayProducts(products.filter(product => product.name.includes('Hot Dog')), 'vertical', 'menu-vertical-hotdogs');
             displayProducts(products.filter(product => product.name.includes('Burrito')), 'vertical', 'menu-vertical-burritos');
-            displayProducts(products.filter(product => product.name.includes('Refresco') || product.name.includes('Agua')), 'vertical', 'menu-vertical-bebidas');
             displayProducts(products.filter(product => product.name.includes('Taco')), 'vertical', 'menu-vertical-tacos');
+            displayProducts(products.filter(product => product.name.includes('Refresco') || product.name.includes('Agua')), 'vertical', 'menu-vertical-bebidas');
+            displayProducts(products.filter(product => product.name.includes('Nachos')), 'vertical', 'menu-vertical-nachos');
         });
     </script>
 
