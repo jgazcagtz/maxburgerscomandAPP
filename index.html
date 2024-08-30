@@ -581,16 +581,21 @@
         <h2>🌮 Tacos</h2>
     </div>
     <div id="menu-vertical-tacos" class="vertical-product-grid"></div>
-<div class="menu-title-container">
+
+    <div class="menu-title-container">
         <h2>🧀 Nachos</h2>
     </div>
     <div id="menu-vertical-nachos" class="vertical-product-grid"></div>
+
     <div class="menu-title-container">
         <h2>🥤 Bebidas</h2>
     </div>
     <div id="menu-vertical-bebidas" class="vertical-product-grid"></div>
 
-    
+    <div class="menu-title-container">
+        <h2>🍰 Postres</h2>
+    </div>
+    <div id="menu-vertical-postres" class="vertical-product-grid"></div>
 
     <div id="edit-modal" class="modal">
         <div class="modal-content">
@@ -627,6 +632,10 @@
         }
 
         function saveOrder() {
+            if (!orderNumber) {
+                alert('Por favor, crea una orden antes de guardar.');
+                return;
+            }
             const tableNumber = document.getElementById('table-number').value || 'Sin mesa';
             const employeeName = document.getElementById('employee-name').value || 'Sin empleado';
             const orderNotes = document.getElementById('order-notes').value || 'Sin notas adicionales';
@@ -634,10 +643,7 @@
             const orderItems = cart.map(item => `${item.name} (${item.quantity})`).join(', ');
             const orderTotal = total.toFixed(2);
             const timestamp = new Date().toLocaleString();
-            if (!orderNumber) {
-                alert('Por favor, crea una orden antes de guardar.');
-                return;
-            }
+            
             const orderData = {
                 orderNumber,
                 tableNumber,
@@ -673,6 +679,10 @@
         }
 
         function saveToCloud() {
+            if (!orderNumber) {
+                alert('Por favor, crea una orden antes de guardar.');
+                return;
+            }
             const tableNumber = document.getElementById('table-number').value || 'Sin mesa';
             const employeeName = document.getElementById('employee-name').value || 'Sin empleado';
             const orderNotes = document.getElementById('order-notes').value || 'Sin notas adicionales';
@@ -680,10 +690,7 @@
             const orderItems = cart.map(item => `${item.name} (${item.quantity})`).join(', ');
             const orderTotal = total.toFixed(2);
             const timestamp = new Date().toLocaleString();
-            if (!orderNumber) {
-                alert('Por favor, crea una orden antes de guardar.');
-                return;
-            }
+            
             const orderData = {
                 orderNumber,
                 tableNumber,
@@ -935,6 +942,7 @@
             displayProducts(products.filter(product => product.name.includes('Taco')), 'vertical', 'menu-vertical-tacos');
             displayProducts(products.filter(product => product.name.includes('Refresco') || product.name.includes('Agua')), 'vertical', 'menu-vertical-bebidas');
             displayProducts(products.filter(product => product.name.includes('Nachos')), 'vertical', 'menu-vertical-nachos');
+            displayProducts(products.filter(product => product.name.includes('Pastel') || product.name.includes('Cheesecake')), 'vertical', 'menu-vertical-postres');
         });
     </script>
 
